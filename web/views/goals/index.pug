@@ -1,0 +1,37 @@
+extends ../layout
+
+block content
+  h1.mb-4 #{title}
+  
+  if goals && goals.length > 0
+    div.row
+      each goal in goals
+        div.col-md-6.col-lg-4.mb-4
+          div.card
+            div.card-body
+              h5.card-title= goal.title
+              p.card-text= goal.description
+              p.card-text
+                strong Goal: 
+                | #{goal.targetValue} #{goal.unit} (#{goal.goalType})
+              p.card-text
+                strong Progress: 
+                | #{goal.currentValue} / #{goal.targetValue} #{goal.unit}
+              
+              div.progress.mb-3
+                - var progressWidth = goal.progress > 100 ? 100 : goal.progress
+                div.progress-bar(role="progressbar", style=`width: ${progressWidth}%`, aria-valuenow=goal.progress, aria-valuemin="0", aria-valuemax="100") #{Math.round(goal.progress)}%
+              
+              div.d-flex.justify-content-between.mt-3
+                a.btn.btn-primary.btn-sm(href=`/goals/${goal._id}`) View Details
+                if goal.completed
+                  span.badge.bg-success.align-self-center Completed
+                else
+                  span.badge.bg-info.align-self-center In Progress
+      
+    hr
+    a.btn.btn-success(href="/goals/create") Add New Goal
+  else
+    div.alert.alert-info
+      p You don't have any fitness goals yet.
+      a.btn.btn-primary.mt-3(href="/goals/create") Create Your First Goal 

@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  div.alert.alert-danger
+    h1.alert-heading Error
+    p= message
+    if error && error.status
+      h2= error.status
+    if error && error.stack && process.env.NODE_ENV === 'development'
+      pre #{error.stack} 

@@ -1,0 +1,70 @@
+/* Main styles for Fitness Goal Tracker */
+
+/* Custom container padding */
+.container {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* Footer styles */
+footer {
+  margin-top: 3rem;
+  padding: 2rem 0;
+  border-top: 1px solid #e7e7e7;
+}
+
+/* Card styles */
+.card {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Progress bar customization */
+.progress {
+  height: 1.5rem;
+  border-radius: 0.25rem;
+}
+
+.progress-bar {
+  font-weight: 600;
+}
+
+/* Form styles */
+.form-label {
+  font-weight: 500;
+}
+
+/* Button customization */
+.btn {
+  border-radius: 0.25rem;
+  padding: 0.5rem 1.25rem;
+}
+
+/* Validation error styles */
+.is-invalid {
+  border-color: #dc3545;
+  padding-right: calc(1.5em + 0.75rem);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+/* Page header styles */
+h1, h2, h3, h4, h5 {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+/* Jumbotron styles */
+.jumbotron {
+  background-color: #f8f9fa;
+  padding: 4rem 2rem;
+  margin-bottom: 2rem;
+  border-radius: 0.5rem;
+} 

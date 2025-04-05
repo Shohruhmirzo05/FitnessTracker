@@ -1,0 +1,75 @@
+extends ../layout
+
+block content
+  h1.mb-4 #{title}
+  
+  if errors && errors.length > 0
+    div.alert.alert-danger
+      h4.alert-heading Form Validation Errors
+      ul
+        each error in errors
+          li= error.msg
+  
+  div.card
+    div.card-body
+      form(action="/goals", method="POST")
+        div.row
+          div.col-md-6
+            div.form-group.mb-3
+              label.form-label(for="title") Goal Title *
+              input.form-control(type="text", id="title", name="title", 
+                value=formData ? formData.title : '', required)
+            
+            div.form-group.mb-3
+              label.form-label(for="description") Description
+              textarea.form-control(id="description", name="description", rows="3")
+                =formData ? formData.description : ''
+                
+            div.form-group.mb-3
+              label.form-label(for="goalType") Goal Type *
+              select.form-select(id="goalType", name="goalType", required)
+                option(value='', selected=!formData) Select goal type
+                option(value='weight', selected=formData && formData.goalType==='weight') Weight
+                option(value='distance', selected=formData && formData.goalType==='distance') Distance
+                option(value='time', selected=formData && formData.goalType==='time') Time
+                option(value='repetition', selected=formData && formData.goalType==='repetition') Repetition
+                option(value='other', selected=formData && formData.goalType==='other') Other
+          
+          div.col-md-6
+            div.row
+              div.col-md-6
+                div.form-group.mb-3
+                  label.form-label(for="targetValue") Target Value *
+                  input.form-control(type="number", id="targetValue", name="targetValue", 
+                    value=formData ? formData.targetValue : '', step="any", required)
+              
+              div.col-md-6
+                div.form-group.mb-3
+                  label.form-label(for="unit") Unit *
+                  input.form-control(type="text", id="unit", name="unit", 
+                    value=formData ? formData.unit : '', required, 
+                    placeholder="kg, km, min, reps, etc.")
+            
+            div.row
+              div.col-md-6
+                div.form-group.mb-3
+                  label.form-label(for="startDate") Start Date *
+                  input.form-control(type="date", id="startDate", name="startDate", 
+                    value=formData ? formData.startDate : new Date().toISOString().slice(0, 10), required)
+              
+              div.col-md-6
+                div.form-group.mb-3
+                  label.form-label(for="endDate") End Date *
+                  input.form-control(type="date", id="endDate", name="endDate", 
+                    value=formData ? formData.endDate : '', required)
+            
+            div.form-group.mb-3
+              label.form-label(for="currentValue") Current Value
+              input.form-control(type="number", id="currentValue", name="currentValue", 
+                value=formData ? formData.currentValue : 0, step="any")
+        
+        div.form-text.mb-3 Fields marked with * are required
+        
+        div.d-flex.justify-content-between
+          a.btn.btn-secondary(href="/goals") Cancel
+          button.btn.btn-primary(type="submit") Create Goal 

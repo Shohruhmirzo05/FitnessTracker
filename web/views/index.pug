@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  div.jumbotron.bg-light.p-5.rounded
+    h1.display-4 #{message}
+    p.lead Track your fitness goals, monitor your progress, and achieve your fitness dreams!
+    hr.my-4
+    p Set specific targets for weight loss, distance, time, or other fitness metrics and track your journey to success.
+    a.btn.btn-primary.btn-lg(href="/goals/create") Create Your First Goal
+
+  div.row.mt-5
+    div.col-md-4
+      div.card.mb-4
+        div.card-body
+          h5.card-title Set Goals
+          p.card-text Define your fitness objectives with specific targets and deadlines.
+          
+    div.col-md-4
+      div.card.mb-4
+        div.card-body
+          h5.card-title Track Progress
+          p.card-text Monitor your advancement towards your fitness goals in real-time.
+          
+    div.col-md-4
+      div.card.mb-4
+        div.card-body
+          h5.card-title Achieve Results
+          p.card-text Stay motivated by visualizing your progress and reaching milestones. 
