@@ -95,8 +95,8 @@ The Fitness Goal Tracker helps you manage your fitness journey by allowing you t
 
 ## Links
 
-- GitHub Repository: [your-repository-url]
-- Live Application: [your-deployed-app-url]
+* GitHub Repository: [FitnessTracker](https://github.com/Shohruhmirzo05/FitnessTracker)
+* Live Application: [FitnessTracker App](https://dashboard.render.com/)
 
 ## Technologies Used
 
