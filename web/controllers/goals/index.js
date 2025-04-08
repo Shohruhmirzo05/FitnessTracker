@@ -7,9 +7,15 @@ const mongoose = require('mongoose');
  */
 exports.getAllGoals = async (req, res) => {
   try {
-    if (!mongoose.connection.readyState) {
-      throw new Error('Database connection not ready');
+    // Check if database is connected
+    if (mongoose.connection.readyState !== 1) {
+      return res.render('goals/index', { 
+        title: 'All Goals',
+        goals: [],
+        error: 'Database connection is not ready. Please try again later.'
+      });
     }
+    
     const goals = await goalService.getAllGoals();
     res.render('goals/index', { 
       title: 'All Goals',

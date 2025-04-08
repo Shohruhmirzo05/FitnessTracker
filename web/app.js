@@ -16,24 +16,6 @@ const goalsRouter = require('./routes/goals');
 // Initialize Express app
 const app = express();
 
-// MongoDB connection
-const mongoURI = process.env.MONGODB_URI;
-
-mongoose.connect(mongoURI, {
-  bufferCommands: false,
-  retryWrites: true,
-  w: 'majority'
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => {
-  console.error('MongoDB connection error:', err);
-  process.exit(1); // Exit if cannot connect to database
-});
-
-mongoose.connection.on('error', err => {
-  console.error('Mongoose connection error:', err);
-});
-
 // Set up view engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -63,10 +45,37 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
-// Start server
+// MongoDB connection and server startup
+const mongoURI = process.env.MONGODB_URI;
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+
+// Connect to MongoDB and start server
+async function startServer() {
+  try {
+    // Connect to MongoDB
+    await mongoose.connect(mongoURI, {
+      bufferCommands: false,
+      retryWrites: true,
+      w: 'majority'
+    });
+    console.log('Connected to MongoDB');
+    
+    // Start the server
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  }
+}
+
+// Handle MongoDB connection errors
+mongoose.connection.on('error', err => {
+  console.error('Mongoose connection error:', err);
 });
+
+// Start the application
+startServer();
 
 module.exports = app;
