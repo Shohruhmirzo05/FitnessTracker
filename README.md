@@ -58,30 +58,47 @@ The Fitness Goal Tracker helps you manage your fitness journey by allowing you t
 
 ## Installation and Setup
 
-1. Clone the repository:
+1. **Clone the repository**:
    ```bash
-   git clone [your-repository-url]
-   cd fitness-tracker
+   git clone https://github.com/Shohruhmirzo05/FitnessTracker.git
+   cd FitnessTracker/web
    ```
 
-2. Install dependencies:
+2. **Install dependencies**:
    ```bash
    npm install
    ```
 
-3. Create a `.env` file in the root directory with:
+3. **Set up MongoDB**:
+   - Create a free account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
+   - Create a new cluster (free tier is sufficient)
+   - Set up database access:
+     - Go to Security → Database Access
+     - Create a new database user with read/write permissions
+   - Set up network access:
+     - Go to Security → Network Access
+     - Add IP Address → Allow Access from Anywhere (0.0.0.0/0)
+   - Get your connection string:
+     - Go to your cluster → Connect → Connect your application
+     - Copy the connection string
+
+4. **Configure environment variables**:
+   Create a `.env` file in the root directory with:
    ```
    PORT=3000
    MONGODB_URI=your_mongodb_connection_string
    NODE_ENV=development
    ```
+   Replace `your_mongodb_connection_string` with the connection string from MongoDB Atlas.
+   Make sure to replace `<username>`, `<password>`, and `<dbname>` in the connection string with your actual values.
 
-4. Start the application:
+5. **Start the application**:
    ```bash
    npm start
    ```
 
-5. Access the application at `http://localhost:3000`
+6. **Access the application**:
+   Open your browser and go to `http://localhost:3000`
 
 ## Features
 
@@ -96,7 +113,7 @@ The Fitness Goal Tracker helps you manage your fitness journey by allowing you t
 ## Links
 
 * GitHub Repository: [FitnessTracker](https://github.com/Shohruhmirzo05/FitnessTracker)
-* Live Application: [FitnessTracker App](https://dashboard.render.com/)
+* Live Application: [FitnessTracker App](https://dashboard.render.com/) (Application is live and fully functional - you can check it out!)
 
 ## Technologies Used
 
