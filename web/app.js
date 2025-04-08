@@ -52,11 +52,16 @@ const PORT = process.env.PORT || 3000;
 // Connect to MongoDB and start server
 async function startServer() {
   try {
-    // Connect to MongoDB
+    // Connect to MongoDB with timeout and retry options
     await mongoose.connect(mongoURI, {
       bufferCommands: false,
       retryWrites: true,
-      w: 'majority'
+      w: 'majority',
+      serverSelectionTimeoutMS: 30000, // 30 seconds
+      socketTimeoutMS: 45000, // 45 seconds
+      connectTimeoutMS: 30000, // 30 seconds
+      retryReads: true,
+      maxPoolSize: 10
     });
     console.log('Connected to MongoDB');
     
