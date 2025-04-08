@@ -21,8 +21,6 @@ const mongoURI = process.env.MONGODB_URI;
 
 mongoose.connect(mongoURI, {
   bufferCommands: false,
-  ssl: true,
-  sslValidate: true,
   retryWrites: true,
   w: 'majority'
 })
