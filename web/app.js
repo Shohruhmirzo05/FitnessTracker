@@ -17,7 +17,7 @@ const goalsRouter = require('./routes/goals');
 const app = express();
 
 // MongoDB connection
-const mongoURI = 'mongodb+srv://alijonovshohruhmirzo:9UeYWT5za3jByAUF@cluster0.xl9t7zo.mongodb.net/<dbname>?retryWrites=true&w=majority';
+const mongoURI = process.env.MONGODB_URI;
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true, bufferCommands: false })
   .then(() => console.log('Connected to MongoDB'))

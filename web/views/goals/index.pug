@@ -1,37 +1,175 @@
 extends ../layout
 
 block content
-  h1.mb-4 #{title}
+  style.
+    .page-title {
+      color: #2c3e50;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      animation: fadeInDown 0.8s ease-out;
+    }
+    .goals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .goal-card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      animation: fadeIn 0.8s ease-out;
+    }
+    .goal-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    .goal-title {
+      color: #2c3e50;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .goal-description {
+      color: #7f8c8d;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .goal-info {
+      margin-bottom: 1rem;
+    }
+    .goal-info strong {
+      color: #2c3e50;
+    }
+    .progress-container {
+      background: #f0f0f0;
+      border-radius: 1rem;
+      height: 1rem;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #3498db, #2ecc71);
+      border-radius: 1rem;
+      transition: width 1s ease-out;
+      position: relative;
+    }
+    .progress-text {
+      position: absolute;
+      right: 0;
+      top: -1.5rem;
+      font-size: 0.9rem;
+      color: #7f8c8d;
+    }
+    .goal-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+    }
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: #3498db;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+    }
+    .btn-success {
+      background: #2ecc71;
+      color: white;
+    }
+    .btn-success:hover {
+      background: #27ae60;
+      transform: translateY(-2px);
+    }
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .status-completed {
+      background: #2ecc71;
+      color: white;
+    }
+    .status-progress {
+      background: #3498db;
+      color: white;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.8s ease-out;
+    }
+    .empty-state p {
+      color: #7f8c8d;
+      margin-bottom: 1.5rem;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .add-goal-container {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+  h1.page-title #{title}
   
   if goals && goals.length > 0
-    div.row
+    div.goals-grid
       each goal in goals
-        div.col-md-6.col-lg-4.mb-4
-          div.card
-            div.card-body
-              h5.card-title= goal.title
-              p.card-text= goal.description
-              p.card-text
-                strong Goal: 
-                | #{goal.targetValue} #{goal.unit} (#{goal.goalType})
-              p.card-text
-                strong Progress: 
-                | #{goal.currentValue} / #{goal.targetValue} #{goal.unit}
-              
-              div.progress.mb-3
-                - var progressWidth = goal.progress > 100 ? 100 : goal.progress
-                div.progress-bar(role="progressbar", style=`width: ${progressWidth}%`, aria-valuenow=goal.progress, aria-valuemin="0", aria-valuemax="100") #{Math.round(goal.progress)}%
-              
-              div.d-flex.justify-content-between.mt-3
-                a.btn.btn-primary.btn-sm(href=`/goals/${goal._id}`) View Details
-                if goal.completed
-                  span.badge.bg-success.align-self-center Completed
-                else
-                  span.badge.bg-info.align-self-center In Progress
-      
-    hr
-    a.btn.btn-success(href="/goals/create") Add New Goal
+        div.goal-card
+          h2.goal-title= goal.title
+          p.goal-description= goal.description
+          div.goal-info
+            strong Goal: 
+            | #{goal.targetValue} #{goal.unit} (#{goal.goalType})
+          div.goal-info
+            strong Progress: 
+            | #{goal.currentValue} / #{goal.targetValue} #{goal.unit}
+          
+          div.progress-container
+            - var progressWidth = goal.progress > 100 ? 100 : goal.progress
+            div.progress-bar(style=`width: ${progressWidth}%`)
+              span.progress-text #{Math.round(goal.progress)}%
+          
+          div.goal-actions
+            a.btn.btn-primary(href=`/goals/${goal._id}`) View Details
+            if goal.completed
+              span.status-badge.status-completed Completed
+            else
+              span.status-badge.status-progress In Progress
+    
+    div.add-goal-container
+      a.btn.btn-success(href="/goals/create") Add New Goal
   else
-    div.alert.alert-info
+    div.empty-state
       p You don't have any fitness goals yet.
-      a.btn.btn-primary.mt-3(href="/goals/create") Create Your First Goal 
+      a.btn.btn-primary(href="/goals/create") Create Your First Goal 

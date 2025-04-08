@@ -1,75 +1,191 @@
 extends ../layout
 
 block content
-  h1.mb-4 #{title}
+  style.
+    .page-title {
+      color: #2c3e50;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      animation: fadeInDown 0.8s ease-out;
+    }
+    .error-container {
+      background: #fee;
+      border-left: 4px solid #e74c3c;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      border-radius: 0.5rem;
+      animation: slideIn 0.5s ease-out;
+    }
+    .error-title {
+      color: #c0392b;
+      margin-bottom: 0.5rem;
+    }
+    .error-list {
+      margin: 0;
+      padding-left: 1.5rem;
+      color: #e74c3c;
+    }
+    .form-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.8s ease-out;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+      font-weight: 500;
+    }
+    .form-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .form-input:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+      outline: none;
+    }
+    .form-text {
+      color: #7f8c8d;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: #3498db;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: #95a5a6;
+      color: white;
+    }
+    .btn-secondary:hover {
+      background: #7f8c8d;
+      transform: translateY(-2px);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    .required-field::after {
+      content: " *";
+      color: #e74c3c;
+    }
+
+  h1.page-title #{title}
   
   if errors && errors.length > 0
-    div.alert.alert-danger
-      h4.alert-heading Form Validation Errors
-      ul
+    div.error-container
+      h4.error-title Form Validation Errors
+      ul.error-list
         each error in errors
           li= error.msg
   
-  div.card
-    div.card-body
-      form(action="/goals", method="POST")
-        div.row
-          div.col-md-6
-            div.form-group.mb-3
-              label.form-label(for="title") Goal Title *
-              input.form-control(type="text", id="title", name="title", 
-                value=formData ? formData.title : '', required)
-            
-            div.form-group.mb-3
-              label.form-label(for="description") Description
-              textarea.form-control(id="description", name="description", rows="3")
-                =formData ? formData.description : ''
-                
-            div.form-group.mb-3
-              label.form-label(for="goalType") Goal Type *
-              select.form-select(id="goalType", name="goalType", required)
-                option(value='', selected=!formData) Select goal type
-                option(value='weight', selected=formData && formData.goalType==='weight') Weight
-                option(value='distance', selected=formData && formData.goalType==='distance') Distance
-                option(value='time', selected=formData && formData.goalType==='time') Time
-                option(value='repetition', selected=formData && formData.goalType==='repetition') Repetition
-                option(value='other', selected=formData && formData.goalType==='other') Other
+  div.form-container
+    form(action="/goals", method="POST")
+      div.form-grid
+        div
+          div.form-group
+            label.form-label.required-field(for="title") Goal Title
+            input.form-input(type="text", id="title", name="title", 
+              value=formData ? formData.title : '', required)
           
-          div.col-md-6
-            div.row
-              div.col-md-6
-                div.form-group.mb-3
-                  label.form-label(for="targetValue") Target Value *
-                  input.form-control(type="number", id="targetValue", name="targetValue", 
-                    value=formData ? formData.targetValue : '', step="any", required)
+          div.form-group
+            label.form-label(for="description") Description
+            textarea.form-input(id="description", name="description", rows="3")
+              =formData ? formData.description : ''
               
-              div.col-md-6
-                div.form-group.mb-3
-                  label.form-label(for="unit") Unit *
-                  input.form-control(type="text", id="unit", name="unit", 
-                    value=formData ? formData.unit : '', required, 
-                    placeholder="kg, km, min, reps, etc.")
-            
-            div.row
-              div.col-md-6
-                div.form-group.mb-3
-                  label.form-label(for="startDate") Start Date *
-                  input.form-control(type="date", id="startDate", name="startDate", 
-                    value=formData ? formData.startDate : new Date().toISOString().slice(0, 10), required)
-              
-              div.col-md-6
-                div.form-group.mb-3
-                  label.form-label(for="endDate") End Date *
-                  input.form-control(type="date", id="endDate", name="endDate", 
-                    value=formData ? formData.endDate : '', required)
-            
-            div.form-group.mb-3
-              label.form-label(for="currentValue") Current Value
-              input.form-control(type="number", id="currentValue", name="currentValue", 
-                value=formData ? formData.currentValue : 0, step="any")
+          div.form-group
+            label.form-label.required-field(for="goalType") Goal Type
+            select.form-input(id="goalType", name="goalType", required)
+              option(value='', selected=!formData) Select goal type
+              option(value='weight', selected=formData && formData.goalType==='weight') Weight
+              option(value='distance', selected=formData && formData.goalType==='distance') Distance
+              option(value='time', selected=formData && formData.goalType==='time') Time
+              option(value='repetition', selected=formData && formData.goalType==='repetition') Repetition
+              option(value='other', selected=formData && formData.goalType==='other') Other
         
-        div.form-text.mb-3 Fields marked with * are required
-        
-        div.d-flex.justify-content-between
-          a.btn.btn-secondary(href="/goals") Cancel
-          button.btn.btn-primary(type="submit") Create Goal 
+        div
+          div.form-group
+            label.form-label.required-field(for="targetValue") Target Value
+            input.form-input(type="number", id="targetValue", name="targetValue", 
+              value=formData ? formData.targetValue : '', step="any", required)
+          
+          div.form-group
+            label.form-label.required-field(for="unit") Unit
+            input.form-input(type="text", id="unit", name="unit", 
+              value=formData ? formData.unit : '', required, 
+              placeholder="kg, km, min, reps, etc.")
+          
+          div.form-group
+            label.form-label.required-field(for="startDate") Start Date
+            input.form-input(type="date", id="startDate", name="startDate", 
+              value=formData ? formData.startDate : new Date().toISOString().slice(0, 10), required)
+          
+          div.form-group
+            label.form-label.required-field(for="endDate") End Date
+            input.form-input(type="date", id="endDate", name="endDate", 
+              value=formData ? formData.endDate : '', required)
+          
+          div.form-group
+            label.form-label(for="currentValue") Current Value
+            input.form-input(type="number", id="currentValue", name="currentValue", 
+              value=formData ? formData.currentValue : 0, step="any")
+      
+      div.form-text Fields marked with * are required
+      
+      div.button-group
+        a.btn.btn-secondary(href="/goals") Cancel
+        button.btn.btn-primary(type="submit") Create Goal 

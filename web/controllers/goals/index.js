@@ -57,10 +57,9 @@ exports.getCreateGoalForm = (req, res) => {
  * POST create new goal
  */
 exports.createGoal = async (req, res) => {
-  // Validate input
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).render('goals/create', {
+    return res.render('goals/create', {
       title: 'Create New Goal',
       errors: errors.array(),
       formData: req.body
@@ -68,22 +67,11 @@ exports.createGoal = async (req, res) => {
   }
 
   try {
-    const goalData = {
-      title: req.body.title,
-      description: req.body.description,
-      goalType: req.body.goalType,
-      targetValue: req.body.targetValue,
-      unit: req.body.unit,
-      startDate: req.body.startDate,
-      endDate: req.body.endDate,
-      currentValue: req.body.currentValue || 0
-    };
-
-    await goalService.createGoal(goalData);
+    await goalService.createGoal(req.body);
     res.redirect('/goals');
   } catch (error) {
     console.error(error);
-    res.status(500).render('goals/create', {
+    res.render('goals/create', {
       title: 'Create New Goal',
       error: 'Error creating goal',
       formData: req.body
@@ -103,7 +91,7 @@ exports.getUpdateGoalForm = async (req, res) => {
       });
     }
     res.render('goals/edit', { 
-      title: 'Edit Goal', 
+      title: 'Edit Goal',
       goal 
     });
   } catch (error) {
@@ -119,33 +107,18 @@ exports.getUpdateGoalForm = async (req, res) => {
  * PUT update goal
  */
 exports.updateGoal = async (req, res) => {
-  // Validate input
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).render('goals/edit', {
+    return res.render('goals/edit', {
       title: 'Edit Goal',
       errors: errors.array(),
-      goal: { 
-        _id: req.params.id,
-        ...req.body 
-      }
+      goal: { ...req.body, _id: req.params.id }
     });
   }
 
   try {
-    const goalData = {
-      title: req.body.title,
-      description: req.body.description,
-      goalType: req.body.goalType,
-      targetValue: req.body.targetValue,
-      unit: req.body.unit,
-      startDate: req.body.startDate,
-      endDate: req.body.endDate,
-      currentValue: req.body.currentValue
-    };
-
-    const updatedGoal = await goalService.updateGoal(req.params.id, goalData);
-    if (!updatedGoal) {
+    const goal = await goalService.updateGoal(req.params.id, req.body);
+    if (!goal) {
       return res.status(404).render('error', { 
         message: 'Goal not found' 
       });
@@ -153,13 +126,10 @@ exports.updateGoal = async (req, res) => {
     res.redirect(`/goals/${req.params.id}`);
   } catch (error) {
     console.error(error);
-    res.status(500).render('goals/edit', {
+    res.render('goals/edit', {
       title: 'Edit Goal',
       error: 'Error updating goal',
-      goal: { 
-        _id: req.params.id,
-        ...req.body 
-      }
+      goal: { ...req.body, _id: req.params.id }
     });
   }
 };
@@ -169,8 +139,8 @@ exports.updateGoal = async (req, res) => {
  */
 exports.deleteGoal = async (req, res) => {
   try {
-    const result = await goalService.deleteGoal(req.params.id);
-    if (!result) {
+    const goal = await goalService.deleteGoal(req.params.id);
+    if (!goal) {
       return res.status(404).render('error', { 
         message: 'Goal not found' 
       });
