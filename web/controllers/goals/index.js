@@ -1,21 +1,27 @@
 const { validationResult } = require('express-validator');
 const goalService = require('../../services/goals');
+const mongoose = require('mongoose');
 
 /**
  * GET all goals
  */
 exports.getAllGoals = async (req, res) => {
   try {
+    if (!mongoose.connection.readyState) {
+      throw new Error('Database connection not ready');
+    }
     const goals = await goalService.getAllGoals();
     res.render('goals/index', { 
-      title: 'All Fitness Goals',
-      goals 
+      title: 'All Goals',
+      goals,
+      error: null
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).render('error', { 
-      message: 'Error retrieving goals',
-      error 
+    console.error('Error retrieving goals:', error);
+    res.render('goals/index', { 
+      title: 'All Goals',
+      goals: [],
+      error: 'Error retrieving goals. Please try again later.'
     });
   }
 };

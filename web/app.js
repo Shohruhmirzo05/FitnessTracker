@@ -19,9 +19,18 @@ const app = express();
 // MongoDB connection
 const mongoURI = process.env.MONGODB_URI;
 
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true, bufferCommands: false })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+mongoose.connect(mongoURI, {
+  bufferCommands: false,
+  ssl: true,
+  sslValidate: true,
+  retryWrites: true,
+  w: 'majority'
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1); // Exit if cannot connect to database
+});
 
 mongoose.connection.on('error', err => {
   console.error('Mongoose connection error:', err);
